@@ -6,8 +6,7 @@ const server = http.createServer();
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "https://drexel-bnb.vercel.app",
-  "https://*.vercel.app",
+  "https://drexel-bnb.vercel.app"
 ];
 
 const io = new Server(server, {
@@ -45,7 +44,16 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
+server.on("request", (req, res) => {
+    if (req.url === "/") {
+        res.writeHead(200, {
+            "Content-Type": "text/plain"
+        });
+        res.end("Socket.IO server is running");
+    }
+});
+
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Socket.IO server listening on port ${PORT}`);
 });
 
